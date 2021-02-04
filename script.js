@@ -13,20 +13,28 @@ document.addEventListener('DOMContentLoaded', ()=>{
         [width, width+1, width+2, width*2 + 2],
         [1, width+1, width*2+1, width*2],
         [width, width*2, width*2+1, width*2+2]
+
+        // [1, width+1, width*2+1, 2],
+        // [width, width+1, width+2, width*2+2],
+        // [1, width+1, width*2+1, width*2],
+        // [width, width*2, width*2+1, width*2+2]
     ];
 
     const Zblock = [
-        [0, width, width + 1, width*2 + 1],
-        [width+1, width+2, width*2, width*2 +1], // Z
-        [width+1, width+2, width*2, width*2 +1],
-        [0, width, width + 1, width*2 +1]
+        [0,width,width+1,width*2+1],
+        [width+1, width+2,width*2,width*2+1],
+        [0,width,width+1,width*2+1],
+        [width+1, width+2,width*2,width*2+1]
     ];
 
     const Tblock = [
+    
+        [width*2, width*2 + 1, width*2 + 2, width+1],
+        [1, width, width+1, width + 2],
         [width, width+1, width+2, width*2 + 1],
-        [1, width, width*2 + 1, width + 1],
-        [1, width, width*2 +1, width + 2],
-        [width*2, width*2 + 1, width*2 + 2, width+1]
+        [1, width, width*2 + 1, width + 1]
+
+
     ];
 
     const squareblock = [
@@ -50,26 +58,39 @@ document.addEventListener('DOMContentLoaded', ()=>{
     let firstRotation = 0;
     let random = Math.floor(Math.random()*blocks.length);
     let current = blocks[random][firstRotation];
-
+    console.log(current.length);
     function draw(){
         // draw the block on the screen
-        current.forEach(index=>{
-            // add class tetromino in tot the html at the position currentPos + index
-            squares[currentPos + index].classList.add('tetromino'); 
-            
-        })
+        current.forEach(index => {squares[currentPos + index].classList.add('tetromino')});
     }
 
     function undraw(){
         // remove the block from the screen
-        current.forEach(index => {
-            squares[currentPos + index].classList.remove('tetromino');
-        })
+        current.forEach(index => {squares[currentPos + index].classList.remove('tetromino')});
     }
     
-    timeId = setInterval(moveDown, 100);    // for every 1000ms do the moveDown
+    //
+    function control(e){
+        if(e.keyCode === 37){
+            moveLeft();
+        }
+        else if(e.keyCode === 39){
+            moveRight();
+        }
+        else if(e.keyCode === 38){
+            rotate();
+        }
+        else if(e.keyCode === 40){
+            moveDown();
+        }
+    }
+    document.addEventListener('keyup', control);
+    
+    
+    timeId = setInterval(moveDown, 1000);    // for every 1000ms do the moveDown
 
     function moveDown(){
+        //Move the block down 
         undraw();
         currentPos += width;
         draw();
@@ -80,14 +101,58 @@ document.addEventListener('DOMContentLoaded', ()=>{
     function freeze(){
         if(current.some(index => squares[currentPos + index + width].classList.contains('taken'))){
             //This if statement check if any index contains class taken then switch the rest of that 
-            //block into class taken
+            //block into class taken.
+            // Block will stop at the end
             current.forEach(index => squares[currentPos + index].classList.add('taken'));
             random = Math.floor(Math.random()*blocks.length);
             current = blocks[random][firstRotation];
             currentPos = 4;
             draw();
-        
         }
     }
+
+    function moveLeft(){
+        //move the block to the left
+        undraw();
+        // current is an array and if any value in this array === 0 isLeftEdge is True
+        const isLeftEdge = current.some(index => (currentPos + index) % width === 0);
+        if(!isLeftEdge){
+            currentPos--;
+        }
+
+        if(current.some(index => squares[currentPos + index].classList.contains('taken'))){
+            currentPos+=1;  // get back to the previous position.
+        }
+        draw();
+    }
+
+    function moveRight(){
+        //move the block to the right
+        //same logic with moveLeft()
+        undraw();
+        const isRightEdge = current.some(index => (currentPos + index) % width === width - 1)
+        if(!isRightEdge){
+            currentPos++;
+        }
+        if(current.some(index => squares[currentPos + index].classList.contains('taken'))){
+            currentPos--;
+        }
+        draw();
+    }
+
+    function rotate(){
+        undraw();
+        firstRotation++;
+        if(firstRotation === current.length){
+            firstRotation = 0;
+        }
+        console.log(currentPos);
+        current = blocks[random][firstRotation];
+        console.log(current);
+        draw();
+    }
+
+
+
 });
 
