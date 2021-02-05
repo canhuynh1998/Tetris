@@ -1,11 +1,12 @@
 document.addEventListener('DOMContentLoaded', ()=>{
     const width = 10;
     const grid = document.querySelector('.grid');
+    let timerId;
     //Array.from() : create an array from input
     let squares = Array.from(document.querySelectorAll('.grid div'));   //getting 200 div inside the grid class
     const scoreDisplay = document.querySelector('#score');  //get score element
     const startBtn = document.querySelector('#start-btn');  //get button element
-
+    let nextRandom = 0;
     //Creating blocks
     // Each array contains 4 arrays. Each of these 4 arrays are coordinate of the blocks. It can be in any order
     const Lblocks = [
@@ -13,11 +14,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
         [width, width+1, width+2, width*2 + 2],
         [1, width+1, width*2+1, width*2],
         [width, width*2, width*2+1, width*2+2]
-
-        // [1, width+1, width*2+1, 2],
-        // [width, width+1, width+2, width*2+2],
-        // [1, width+1, width*2+1, width*2],
-        // [width, width*2, width*2+1, width*2+2]
     ];
 
     const Zblock = [
@@ -29,10 +25,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     const Tblock = [
     
-        [width*2, width*2 + 1, width*2 + 2, width+1],
-        [1, width, width+1, width + 2],
-        [width, width+1, width+2, width*2 + 1],
-        [1, width, width*2 + 1, width + 1]
+        [1,width,width+1,width+2],
+        [1,width+1,width+2,width*2+1],
+        [width,width+1,width+2,width*2+1],
+        [1,width,width+1,width*2+1]
 
 
     ];
@@ -86,9 +82,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
     document.addEventListener('keyup', control);
     
-    
-    timeId = setInterval(moveDown, 1000);    // for every 1000ms do the moveDown
-
     function moveDown(){
         //Move the block down 
         undraw();
@@ -104,10 +97,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
             //block into class taken.
             // Block will stop at the end
             current.forEach(index => squares[currentPos + index].classList.add('taken'));
-            random = Math.floor(Math.random()*blocks.length);
+            random = nextRandom;
+            nextRandom = Math.floor(Math.random()*blocks.length);
             current = blocks[random][firstRotation];
             currentPos = 4;
             draw();
+            displayShape();
         }
     }
 
@@ -152,6 +147,42 @@ document.addEventListener('DOMContentLoaded', ()=>{
         draw();
     }
 
+    const displaySquares = document.querySelectorAll('.mini-grid div');
+    const displayWidth = 4;
+    let displayIndex = 0
+
+    // Choose a fix block to display
+    const nextBlocks =[
+        [1, displayWidth + 1, displayWidth * 2 +1, 2], //L Shape
+        [0, displayWidth, displayWidth + 1, displayWidth*2 + 1], //Z shape
+        [1, displayWidth, displayWidth + 1, displayWidth + 2], // T shape
+        [1, displayWidth + 1, displayWidth*2 + 1, displayWidth*3 + 1], // I shape
+        [0, 1, displayWidth, displayWidth+1] //oTetromino
+    ]
+
+    function displayShape(){
+        //display new block
+
+        displaySquares.forEach(square=>{
+            square.classList.remove('tetromino');
+        })
+        nextBlocks[nextRandom].forEach(index =>{
+            displaySquares[displayIndex+index].classList.add('tetromino');
+        })
+    }
+
+    startBtn.addEventListener('click',() =>{
+        if(timerId){
+            //this is to pause the game
+            clearInterval(timerId);
+            timerId = null;
+        }else{
+            draw();
+            timerId = setInterval(moveDown, 1000);
+            nextRandom = Math.floor(Math.random()*blocks.length);
+            displayShape();
+        }
+    })
 
 
 });
