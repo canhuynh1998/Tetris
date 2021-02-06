@@ -1,7 +1,16 @@
 document.addEventListener('DOMContentLoaded', ()=>{
+    const colors = [
+        'orange',
+        'red',
+        'purple',
+        'green',
+        'blue'
+    ]
+
     const width = 10;
     const grid = document.querySelector('.grid');
     let timerId;
+    let score = 0;
     //Array.from() : create an array from input
     let squares = Array.from(document.querySelectorAll('.grid div'));   //getting 200 div inside the grid class
     const scoreDisplay = document.querySelector('#score');  //get score element
@@ -57,12 +66,19 @@ document.addEventListener('DOMContentLoaded', ()=>{
     console.log(current.length);
     function draw(){
         // draw the block on the screen
-        current.forEach(index => {squares[currentPos + index].classList.add('tetromino')});
+        current.forEach(index => {
+            squares[currentPos + index].classList.add('tetromino');
+            squares[currentPos + index].style.backgroundColor = colors[random];
+        });
+        
     }
 
     function undraw(){
         // remove the block from the screen
-        current.forEach(index => {squares[currentPos + index].classList.remove('tetromino')});
+        current.forEach(index => {
+            squares[currentPos + index].classList.remove('tetromino');
+            squares[currentPos + index].style.backgroundColor = '';
+        });
     }
     
     //
@@ -103,6 +119,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
             currentPos = 4;
             draw();
             displayShape();
+            addScore();
+            gameOver();
         }
     }
 
@@ -153,11 +171,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     // Choose a fix block to display
     const nextBlocks =[
-        [1, displayWidth + 1, displayWidth * 2 +1, 2], //L Shape
-        [0, displayWidth, displayWidth + 1, displayWidth*2 + 1], //Z shape
-        [1, displayWidth, displayWidth + 1, displayWidth + 2], // T shape
-        [1, displayWidth + 1, displayWidth*2 + 1, displayWidth*3 + 1], // I shape
-        [0, 1, displayWidth, displayWidth+1] //oTetromino
+        [1, displayWidth+1, displayWidth*2+1, 2], //lTetromino
+        [0, displayWidth, displayWidth+1, displayWidth*2+1], //zTetromino
+        [1, displayWidth, displayWidth+1, displayWidth+2], //tTetromino
+        [0, 1, displayWidth, displayWidth+1], //oTetromino
+        [1, displayWidth+1, displayWidth*2+1, displayWidth*3+1] //iTetromino
     ]
 
     function displayShape(){
@@ -165,9 +183,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
         displaySquares.forEach(square=>{
             square.classList.remove('tetromino');
+            square.style.backgroundColor = '';
         })
         nextBlocks[nextRandom].forEach(index =>{
             displaySquares[displayIndex+index].classList.add('tetromino');
+            displaySquares[displayIndex+index].style.backgroundColor = colors[nextRandom];
         })
     }
 
@@ -184,6 +204,31 @@ document.addEventListener('DOMContentLoaded', ()=>{
         }
     })
 
+    function addScore(){
+        for(let i = 0; i<199; i+= width){
+            const row = [i, i+1, i+2, i+3, i+4, i+5, i+6, i+7, i+8, i+9];
+            if(row.every(index => squares[index].classList.contains('taken'))){
+                score += width;
+                scoreDisplay.innerHTML = score;
+                row.forEach(index =>{
+                    squares[index].classList.remove('taken');
+                    squares[index].classList.remove('tetromino');
+                    squares[index].style.backgroundColor = '';
+                })
+                const removedSquare = squares.splice(i, width);
+                squares = removedSquare.concat(squares);
+                squares.forEach(cell => grid.appendChild(cell));
+            }
+        }
+    }
+    
+    function gameOver(){
+        if(current.some(index=> squares[currentPos + index].classList.contains('taken'))){
+            scoreDisplay.innerHTML = 'end';
+            clearInterval(timerId);
+        }
+    }
 
 });
 
+//array.splice(index, count)
