@@ -162,6 +162,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         console.log(currentPos);
         current = blocks[random][firstRotation];
         console.log(current);
+        rotateCheck();
         draw();
     }
 
@@ -226,6 +227,30 @@ document.addEventListener('DOMContentLoaded', ()=>{
         if(current.some(index=> squares[currentPos + index].classList.contains('taken'))){
             scoreDisplay.innerHTML = 'end';
             clearInterval(timerId);
+        }
+    }
+
+    //Bound checking 
+    function rightEdge(){
+        return current.some(index => (currentPos+index+1)%width ===0);
+    }
+    function leftEdge(){
+        return current.some(index =>(currentPos + index) % width === 0);
+    }
+
+    function rotateCheck(P){
+        //Check if the rotation is out of bound
+        P = P || currentPos;
+        if((P+1) % width < 4){
+            if(rightEdge()){
+                currentPos++;
+                rotateCheck(P);
+            }
+        }else if((P % width) > 5){
+            if(leftEdge()){
+                currentPos--;
+                rotateCheck(P);
+            }
         }
     }
 
