@@ -6,11 +6,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
         'green',
         'blue'
     ]
-
+    const listScore = new Array();
     const width = 10;
     const grid = document.querySelector('.grid');
     let timerId;
     let score = 0;
+    let gameStart = false;
     //Array.from() : create an array from input
     let squares = Array.from(document.querySelectorAll('.grid div'));   //getting 200 div inside the grid class
     const scoreDisplay = document.querySelector('#score');  //get score element
@@ -198,8 +199,11 @@ document.addEventListener('DOMContentLoaded', ()=>{
             clearInterval(timerId);
             timerId = null;
         }else{
+            if(gameStart === false){
+                gameStart = true;
+            }
             draw();
-            timerId = setInterval(moveDown, 1000);
+            timerId = setInterval(moveDown, 100);
             nextRandom = Math.floor(Math.random()*blocks.length);
             displayShape();
         }
@@ -225,7 +229,9 @@ document.addEventListener('DOMContentLoaded', ()=>{
     
     function gameOver(){
         if(current.some(index=> squares[currentPos + index].classList.contains('taken'))){
+            console.log(score);
             scoreDisplay.innerHTML = 'end';
+            alert('You lost!!');
             clearInterval(timerId);
         }
     }
