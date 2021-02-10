@@ -1,22 +1,21 @@
 document.addEventListener('DOMContentLoaded', ()=>{
-    const colors = [
-        'orange',
-        'red',
-        'purple',
-        'green',
-        'blue'
-    ]
+
     const listScore = new Array();
     const width = 10;
     const grid = document.querySelector('.grid');
     let timerId;
     let score = 0;
-    let gameStart = false;
+    let gameStart;
+    
     //Array.from() : create an array from input
     let squares = Array.from(document.querySelectorAll('.grid div'));   //getting 200 div inside the grid class
     const scoreDisplay = document.querySelector('#score');  //get score element
     const startBtn = document.querySelector('#start-btn');  //get button element
     let nextRandom = 0;
+    const testBtn = document.querySelector('#test');
+   
+    testBtn.addEventListener('click', ()=>{location.reload();});    //refresh the page.
+
     //Creating blocks
     // Each array contains 4 arrays. Each of these 4 arrays are coordinate of the blocks. It can be in any order
     const Lblocks = [
@@ -57,6 +56,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
         [1, width+1, width*2 +1, width*3 + 1]
     ];
 
+    const colors = [
+        'orange',
+        'red',
+        'purple',
+        'green',
+        'blue'
+    ]
     const blocks = [Lblocks, Zblock, Tblock, squareblock, Iblock];
 
     let currentPos = 4;
@@ -194,14 +200,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
 
     startBtn.addEventListener('click',() =>{
+        gameStart = true;
         if(timerId){
             //this is to pause the game
             clearInterval(timerId);
             timerId = null;
         }else{
-            if(gameStart === false){
-                gameStart = true;
-            }
             draw();
             timerId = setInterval(moveDown, 100);
             nextRandom = Math.floor(Math.random()*blocks.length);
@@ -229,10 +233,13 @@ document.addEventListener('DOMContentLoaded', ()=>{
     
     function gameOver(){
         if(current.some(index=> squares[currentPos + index].classList.contains('taken'))){
+            gameStart = false;
             console.log(score);
             scoreDisplay.innerHTML = 'end';
             alert('You lost!!');
             clearInterval(timerId);
+            
+            
         }
     }
 
