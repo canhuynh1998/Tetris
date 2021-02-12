@@ -1,75 +1,62 @@
 document.addEventListener('DOMContentLoaded', ()=>{
-
+    
+    // Essential variables
     const width = 10;
-    const grid = document.querySelector('.grid');
     let timerId;
     let score = 0;
-
+    let nextRandom = 0;
     
+    //D.O.M
     //Array.from() : create an array from input
     let squares = Array.from(document.querySelectorAll('.grid div'));   //getting 200 div inside the grid class
     const scoreDisplay = document.querySelector('#score');  //get score element
     const startBtn = document.querySelector('#start-btn');  //get button element
-    let nextRandom = 0;
     const testBtn = document.querySelector('#test');
-   
-    testBtn.addEventListener('click', ()=>{location.reload();});    //refresh the page.
+    const grid = document.querySelector('.grid');
+    let scores = [0,0,0,0,0];
+    
+    //Ranking List
+    const first = document.querySelector('#first');
+    const second = document.querySelector('#second');
+    const third = document.querySelector('#third');
+    const forth = document.querySelector('#forth');
+    const fifth = document.querySelector('#fifth');
+
+    console.log(first.textContent === '');
+    function getScore(){
+        if(first.textContent !== ''){
+            //There is something in the ranking list!!
+        }
+        return scores;  // Initially it is array of length 5 with all 0
+    }
+    getScore();
+    console.log(scores);
 
     //Creating blocks
     // Each array contains 4 arrays. Each of these 4 arrays are coordinate of the blocks. It can be in any order
-    const Lblocks = [
-        [1, width+1, width*2 + 1, 2],
-        [width, width+1, width+2, width*2 + 2],
-        [1, width+1, width*2+1, width*2],
-        [width, width*2, width*2+1, width*2+2]
-    ];
+    const Lblocks = [[1, width+1, width*2 + 1, 2], [width, width+1, width+2, width*2 + 2], 
+                     [1, width+1, width*2+1, width*2],[width, width*2, width*2+1, width*2+2]];
 
-    const Zblock = [
-        [0,width,width+1,width*2+1],
-        [width+1, width+2,width*2,width*2+1],
-        [0,width,width+1,width*2+1],
-        [width+1, width+2,width*2,width*2+1]
-    ];
+    const Zblock = [[0,width,width+1,width*2+1], [width+1, width+2,width*2,width*2+1],
+                    [0,width,width+1,width*2+1],[width+1, width+2,width*2,width*2+1] ];
 
-    const Tblock = [
-    
-        [1,width,width+1,width+2],
-        [1,width+1,width+2,width*2+1],
-        [width,width+1,width+2,width*2+1],
-        [1,width,width+1,width*2+1]
+    const Tblock = [[1,width,width+1,width+2],[1,width+1,width+2,width*2+1],
+                    [width,width+1,width+2,width*2+1],[1,width,width+1,width*2+1]];
 
+    const squareblock = [[0, 1, width, width+1],[0, 1, width, width+1],
+                         [0, 1, width, width+1],[0, 1, width, width+1] ];
 
-    ];
+    const Iblock = [[width, width+1, width+2, width+3],[1, width+1, width*2 +1, width*3 + 1],
+                    [width, width+1, width+2, width+3],[1, width+1, width*2 +1, width*3 + 1]];
 
-    const squareblock = [
-        [0, 1, width, width+1],
-        [0, 1, width, width+1],
-        [0, 1, width, width+1],
-        [0, 1, width, width+1]
-    ];
-
-    const Iblock = [
-        [width, width+1, width+2, width+3],
-        [1, width+1, width*2 +1, width*3 + 1],
-        [width, width+1, width+2, width+3],
-        [1, width+1, width*2 +1, width*3 + 1]
-    ];
-
-    const colors = [
-        'orange',
-        'red',
-        'purple',
-        'green',
-        'blue'
-    ]
+    const colors = ['orange', 'red', 'purple','green','blue'];
     const blocks = [Lblocks, Zblock, Tblock, squareblock, Iblock];
 
     let currentPos = 4;
-    // let current = blocks[0][0];
     let firstRotation = 0;
     let random = Math.floor(Math.random()*blocks.length);
     let current = blocks[random][firstRotation];
-    console.log(current.length);
+
     function draw(){
         // draw the block on the screen
         current.forEach(index => {
@@ -87,7 +74,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         });
     }
     
-    //
+    //Controlling the blocks
     function control(e){
         if(e.keyCode === 37){
             moveLeft();
@@ -104,15 +91,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
     document.addEventListener('keyup', control);
     
-    function moveDown(){
-        //Move the block down 
-        undraw();
-        currentPos += width;
-        draw();
-        freeze();
-    }
-
-
     function freeze(){
         if(current.some(index => squares[currentPos + index + width].classList.contains('taken'))){
             //This if statement check if any index contains class taken then switch the rest of that 
@@ -130,6 +108,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
         }
     }
 
+
+    /********************MOVING BLOCKS********************/
     function moveLeft(){
         //move the block to the left
         undraw();
@@ -138,7 +118,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
         if(!isLeftEdge){
             currentPos--;
         }
-
         if(current.some(index => squares[currentPos + index].classList.contains('taken'))){
             currentPos+=1;  // get back to the previous position.
         }
@@ -172,6 +151,14 @@ document.addEventListener('DOMContentLoaded', ()=>{
         draw();
     }
 
+    function moveDown(){
+        //Move the block down 
+        undraw();
+        currentPos += width;
+        draw();
+        freeze();
+    }
+
     const displaySquares = document.querySelectorAll('.mini-grid div');
     const displayWidth = 4;
     let displayIndex = 0
@@ -187,7 +174,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     function displayShape(){
         //display new block
-
         displaySquares.forEach(square=>{
             square.classList.remove('tetromino');
             square.style.backgroundColor = '';
@@ -197,20 +183,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
             displaySquares[displayIndex+index].style.backgroundColor = colors[nextRandom];
         })
     }
-
-    startBtn.addEventListener('click',() =>{
-        gameStart = true;
-        if(timerId){
-            //this is to pause the game
-            clearInterval(timerId);
-            timerId = null;
-        }else{
-            draw();
-            timerId = setInterval(moveDown, 100);
-            nextRandom = Math.floor(Math.random()*blocks.length);
-            displayShape();
-        }
-    })
 
     function addScore(){
         for(let i = 0; i<199; i+= width){
@@ -237,12 +209,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
             scoreDisplay.innerHTML = 'end';
             alert('You lost!!');
             clearInterval(timerId);
-            
-            
         }
     }
 
-    //Bound checking 
+    /********************Rotation checking********************/
     function rightEdge(){
         return current.some(index => (currentPos+index+1)%width ===0);
     }
@@ -265,6 +235,23 @@ document.addEventListener('DOMContentLoaded', ()=>{
             }
         }
     }
+
+
+    /********************Button functionality********************/
+    testBtn.addEventListener('click', ()=>{location.reload();});    //refresh the page.
+    startBtn.addEventListener('click',() =>{
+        gameStart = true;
+        if(timerId){
+            //this is to pause the game
+            clearInterval(timerId);
+            timerId = null;
+        }else{
+            draw();
+            timerId = setInterval(moveDown, 100);
+            nextRandom = Math.floor(Math.random()*blocks.length);
+            displayShape();
+        }
+    })
 
 });
 
