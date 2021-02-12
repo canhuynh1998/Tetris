@@ -16,16 +16,35 @@ document.addEventListener('DOMContentLoaded', ()=>{
     let scores = [0,0,0,0,0];
     
     //Ranking List
-    const first = document.querySelector('#first');
-    const second = document.querySelector('#second');
-    const third = document.querySelector('#third');
-    const forth = document.querySelector('#forth');
-    const fifth = document.querySelector('#fifth');
+    let first =  document.querySelector('#first');
+    let second = document.querySelector('#second');
+    let third = document.querySelector('#third').textContent;
+    let forth = document.querySelector('#forth').textContent;
+    let fifth = document.querySelector('#fifth').textContent;
 
-    console.log(first.textContent === '');
+    console.log(first.textConte === '');
     function getScore(){
-        if(first.textContent !== ''){
+        //Get Score to sort
+        if(first.textContent !== undefined){
             //There is something in the ranking list!!
+            first = Number(first.textContent);
+            scores[0] = first;
+        }
+        if(second.textContent !== undefined){
+            second = Number(second.textContent);
+            scores[1] = second;
+        }
+        if(third.textContent !==undefined){
+            third = Number(third.textContent);
+            scores[2] = third;
+        }
+        if(forth.textContent !==undefined){
+            forth = Number(forth.textContent);
+            scores[3] = forth;
+        }
+        if(fifth.textContent !==undefined){
+            fifth = Number(fifth.textContent);
+            scores[4] = fifth;
         }
         return scores;  // Initially it is array of length 5 with all 0
     }
