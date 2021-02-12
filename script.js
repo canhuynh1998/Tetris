@@ -1,11 +1,10 @@
 document.addEventListener('DOMContentLoaded', ()=>{
 
-    const listScore = new Array();
     const width = 10;
     const grid = document.querySelector('.grid');
     let timerId;
     let score = 0;
-    let gameStart;
+
     
     //Array.from() : create an array from input
     let squares = Array.from(document.querySelectorAll('.grid div'));   //getting 200 div inside the grid class
