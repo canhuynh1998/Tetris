@@ -50,6 +50,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
     }
     getScore();
     console.log(scores);
+    scores.sort((a, b) => a-b);
+    console.log(scores)
 
     //Creating blocks
     // Each array contains 4 arrays. Each of these 4 arrays are coordinate of the blocks. It can be in any order
