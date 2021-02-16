@@ -189,7 +189,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
             console.log(score);
             scoreDisplay.innerHTML = 'end';
-            alert('Bye')
             clearInterval(timerId);
         }
     }
