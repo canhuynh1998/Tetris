@@ -5,9 +5,15 @@
     /*wrap those div inside a box*/
     display: flex;
     flex-wrap: wrap;
-    
+    margin-left: 400px;
+  
 }
 
+#start-btn{
+    margin-left: 400px;
+    margin-top: 90px;
+    margin-top: 50px;
+}
 .grid div{
     /*this will style the div inside the grid div*/
     height:20px ;
@@ -20,7 +26,8 @@
 }
 
 .mini-grid{
-    margin-left: 50px ;
+    margin-left: 100px ;
+ 
     width: 80px;
     height: 80px;
     display: flex;
@@ -38,6 +45,6 @@
 }
 
 .top-highest{
-    margin-left: 300px ;
+    margin-left: 200px ;
     height: 80px;
 }

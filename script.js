@@ -5,54 +5,15 @@ document.addEventListener('DOMContentLoaded', ()=>{
     let timerId;
     let score = 0;
     let nextRandom = 0;
-    
+
     //D.O.M
     //Array.from() : create an array from input
     let squares = Array.from(document.querySelectorAll('.grid div'));   //getting 200 div inside the grid class
     const scoreDisplay = document.querySelector('#score');  //get score element
     const startBtn = document.querySelector('#start-btn');  //get button element
+    const speedBtn = document.querySelector('#speed-btn');  //get button element
     const testBtn = document.querySelector('#test');
     const grid = document.querySelector('.grid');
-    let scores = [0,0,0,0,0];
-    
-    //Ranking List
-    let first =  document.querySelector('#first');
-    let second = document.querySelector('#second');
-    let third = document.querySelector('#third').textContent;
-    let forth = document.querySelector('#forth').textContent;
-    let fifth = document.querySelector('#fifth').textContent;
-
-    console.log(first.textConte === '');
-    function getScore(){
-        //Get Score to sort
-        if(first.textContent !== undefined){
-            //There is something in the ranking list!!
-            first = Number(first.textContent);
-            scores[0] = first;
-        }
-        if(second.textContent !== undefined){
-            second = Number(second.textContent);
-            scores[1] = second;
-        }
-        if(third.textContent !==undefined){
-            third = Number(third.textContent);
-            scores[2] = third;
-        }
-        if(forth.textContent !==undefined){
-            forth = Number(forth.textContent);
-            scores[3] = forth;
-        }
-        if(fifth.textContent !==undefined){
-            fifth = Number(fifth.textContent);
-            scores[4] = fifth;
-        }
-        return scores;  // Initially it is array of length 5 with all 0
-    }
-    getScore();
-    console.log(scores);
-    scores.sort((a, b) => a-b);
-    console.log(scores)
-
     //Creating blocks
     // Each array contains 4 arrays. Each of these 4 arrays are coordinate of the blocks. It can be in any order
     const Lblocks = [[1, width+1, width*2 + 1, 2], [width, width+1, width+2, width*2 + 2], 
@@ -225,13 +186,15 @@ document.addEventListener('DOMContentLoaded', ()=>{
     
     function gameOver(){
         if(current.some(index=> squares[currentPos + index].classList.contains('taken'))){
-            gameStart = false;
+
             console.log(score);
             scoreDisplay.innerHTML = 'end';
-            alert('You lost!!');
+            alert('Bye')
             clearInterval(timerId);
         }
     }
+
+
 
     /********************Rotation checking********************/
     function rightEdge(){
@@ -260,8 +223,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
     /********************Button functionality********************/
     testBtn.addEventListener('click', ()=>{location.reload();});    //refresh the page.
+    
     startBtn.addEventListener('click',() =>{
-        gameStart = true;
         if(timerId){
             //this is to pause the game
             clearInterval(timerId);
@@ -272,7 +235,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
             nextRandom = Math.floor(Math.random()*blocks.length);
             displayShape();
         }
-    })
+    });
+    
 
 });
 
