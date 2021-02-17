@@ -5,14 +5,15 @@
     /*wrap those div inside a box*/
     display: flex;
     flex-wrap: wrap;
-    margin-left: 400px;
-  
+    margin-left: 350px;
+    margin-top: 0%;
 }
 
-#start-btn{
-    margin-left: 400px;
-    margin-top: 90px;
-    margin-top: 50px;
+#speed-btn{
+    margin-top: 20px;
+}
+#test{
+    margin-top: 20px;
 }
 .grid div{
     /*this will style the div inside the grid div*/
@@ -26,7 +27,7 @@
 }
 
 .mini-grid{
-    margin-left: 100px ;
+    margin-left: 70px ;
  
     width: 80px;
     height: 80px;

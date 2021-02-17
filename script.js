@@ -11,7 +11,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
     let squares = Array.from(document.querySelectorAll('.grid div'));   //getting 200 div inside the grid class
     const scoreDisplay = document.querySelector('#score');  //get score element
     const startBtn = document.querySelector('#start-btn');  //get button element
-    const speedBtn = document.querySelector('#speed-btn');  //get button element
     const testBtn = document.querySelector('#test');
     const grid = document.querySelector('.grid');
     //Creating blocks
@@ -223,20 +222,20 @@ document.addEventListener('DOMContentLoaded', ()=>{
     /********************Button functionality********************/
     testBtn.addEventListener('click', ()=>{location.reload();});    //refresh the page.
     
-    startBtn.addEventListener('click',() =>{
+    startBtn.addEventListener('click',() =>activate());
+
+    function activate(){
         if(timerId){
             //this is to pause the game
             clearInterval(timerId);
             timerId = null;
         }else{
             draw();
-            timerId = setInterval(moveDown, 100);
+            timerId = setInterval(moveDown, 1000);
             nextRandom = Math.floor(Math.random()*blocks.length);
             displayShape();
         }
-    });
-    
-
+    }
 });
 
 //array.splice(index, count)
